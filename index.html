@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>NeoBudget - Bilancio Personale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">NB</div>
+        <div class="brand-text">
+          <h1>NeoBudget</h1>
+          <span>Bilancio personale, ma bello.</span>
+        </div>
+      </div>
+      <div class="header-controls">
+        <label class="date-filter-label">
+          <span>Data di riferimento</span>
+          <input type="date" id="dateFilter">
+        </label>
+        <button id="btnToday" class="btn primary">Oggi</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">Saldo previsto</span>
+        <span class="kpi-value" id="stat-saldo">0,00 €</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Liquidità disponibile</span>
+        <span class="kpi-value" id="stat-liquidita">0,00 €</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Importo investito</span>
+        <span class="kpi-value" id="stat-investito">0,00 €</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Entrate previste</span>
+        <span class="kpi-value" id="stat-entrate-previste">0,00 €</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Spese previste</span>
+        <span class="kpi-value" id="stat-spese-previste">0,00 €</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Totale complessivo</span>
+        <span class="kpi-value" id="stat-totale">0,00 €</span>
+      </div>
+    </section>
+
+    <main class="app-main">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Nuovo movimento</h2>
+          <form id="mov-form" autocomplete="off">
+            <div class="field-group">
+              <label>Tipo</label>
+              <div class="field-row">
+                <label class="chip">
+                  <input type="radio" name="mov-type" value="income" checked>
+                  <span>Entrata</span>
+                </label>
+                <label class="chip">
+                  <input type="radio" name="mov-type" value="expense">
+                  <span>Uscita</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label>Conto</label>
+              <select id="mov-account">
+                <option value="liquid">Liquidità</option>
+                <option value="invested">Investito</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label>Categoria</label>
+              <input type="text" id="mov-category" placeholder="Es. Stipendio, Affitto...">
+            </div>
+
+            <div class="field-row">
+              <div class="field-group half">
+                <label>Importo</label>
+                <input type="number" id="mov-amount" min="0" step="0.01" placeholder="0.00">
+              </div>
+              <div class="field-group half">
+                <label>Data</label>
+                <input type="date" id="mov-date">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label>Note</label>
+              <input type="text" id="mov-note" placeholder="Opzionale">
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="mov-submit" class="btn primary full-width">
+                Aggiungi movimento
+              </button>
+              <button type="button" id="mov-cancel" class="btn ghost full-width hidden">
+                Annulla modifica
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Dati & backup</h2>
+          <div class="field-group">
+            <button id="btnExport" class="btn full-width">Esporta JSON</button>
+          </div>
+          <div class="field-group">
+            <button id="btnImport" class="btn full-width">Importa JSON</button>
+            <input type="file" id="fileImport" accept="application/json" class="hidden">
+          </div>
+          <div class="field-group">
+            <button id="btnReset" class="btn danger full-width">Reset completo</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <nav class="tabs">
+          <button class="tab active" data-tab="movimenti">Movimenti</button>
+          <button class="tab" data-tab="entrate">Entrate ricorrenti</button>
+          <button class="tab" data-tab="spese">Spese ricorrenti</button>
+        </nav>
+
+        <section class="tab-content active" id="tab-movimenti">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Tipo</th>
+                  <th>Conto</th>
+                  <th>Categoria</th>
+                  <th>Note</th>
+                  <th class="align-right">Importo</th>
+                  <th class="align-center">Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="mov-list">
+                <!-- Movimenti -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="tab-content" id="tab-entrate">
+          <div class="panel inline-panel">
+            <h3>Nuova entrata ricorrente</h3>
+            <form id="rec-income-form" autocomplete="off">
+              <div class="field-group">
+                <label>Nome</label>
+                <input type="text" id="rec-income-name" placeholder="Es. Stipendio mensile">
+              </div>
+              <div class="field-row">
+                <div class="field-group half">
+                  <label>Importo</label>
+                  <input type="number" id="rec-income-amount" min="0" step="0.01">
+                </div>
+                <div class="field-group half">
+                  <label>Conto</label>
+                  <select id="rec-income-account">
+                    <option value="liquid">Liquidità</option>
+                    <option value="invested">Investito</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Categoria</label>
+                <input type="text" id="rec-income-category" placeholder="Es. Stipendio">
+              </div>
+              <div class="field-row">
+                <div class="field-group half">
+                  <label>Dal</label>
+                  <input type="date" id="rec-income-start">
+                </div>
+                <div class="field-group half">
+                  <label>Fino al (opzionale)</label>
+                  <input type="date" id="rec-income-end">
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Tipo di ricorrenza</label>
+                <select id="rec-income-mode">
+                  <option value="monthly">Mensile</option>
+                  <option value="daily">Ogni giorno</option>
+                  <option value="everyXDays">Ogni X giorni</option>
+                  <option value="weekly">Ogni X settimane</option>
+                  <option value="weeklySpecific">Giorni specifici della settimana</option>
+                  <option value="everyXMonths">Ogni X mesi</option>
+                  <option value="yearly">Annuale</option>
+                </select>
+              </div>
+
+              <div class="field-row rec-interval-row" id="rec-income-interval-row">
+                <div class="field-group half">
+                  <label>Intervallo</label>
+                  <input type="number" id="rec-income-interval" min="1" value="1">
+                </div>
+              </div>
+
+              <div class="field-group rec-weekdays-row hidden" id="rec-income-weekdays-row">
+                <label>Giorni della settimana</label>
+                <div class="weekday-group" id="rec-income-weekdays">
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="1">L
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="2">M
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="3">M
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="4">G
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="5">V
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="6">S
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="7">D
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" id="rec-income-submit" class="btn primary full-width">
+                  Aggiungi entrata ricorrente
+                </button>
+                <button type="button" id="rec-income-cancel" class="btn ghost full-width hidden">
+                  Annulla modifica
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Categoria</th>
+                  <th>Ricorrenza</th>
+                  <th>Dal</th>
+                  <th>Al</th>
+                  <th>Conto</th>
+                  <th class="align-right">Importo</th>
+                  <th class="align-center">Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="rec-income-list">
+                <!-- Entrate ricorrenti -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="tab-content" id="tab-spese">
+          <div class="panel inline-panel">
+            <h3>Nuova spesa ricorrente</h3>
+            <form id="rec-expense-form" autocomplete="off">
+              <div class="field-group">
+                <label>Nome</label>
+                <input type="text" id="rec-expense-name" placeholder="Es. Affitto, Abbonamento...">
+              </div>
+              <div class="field-row">
+                <div class="field-group half">
+                  <label>Importo</label>
+                  <input type="number" id="rec-expense-amount" min="0" step="0.01">
+                </div>
+                <div class="field-group half">
+                  <label>Conto</label>
+                  <select id="rec-expense-account">
+                    <option value="liquid">Liquidità</option>
+                    <option value="invested">Investito</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Categoria</label>
+                <input type="text" id="rec-expense-category" placeholder="Es. Affitto, Bollette">
+              </div>
+              <div class="field-row">
+                <div class="field-group half">
+                  <label>Dal</label>
+                  <input type="date" id="rec-expense-start">
+                </div>
+                <div class="field-group half">
+                  <label>Fino al (opzionale)</label>
+                  <input type="date" id="rec-expense-end">
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Tipo di ricorrenza</label>
+                <select id="rec-expense-mode">
+                  <option value="monthly">Mensile</option>
+                  <option value="daily">Ogni giorno</option>
+                  <option value="everyXDays">Ogni X giorni</option>
+                  <option value="weekly">Ogni X settimane</option>
+                  <option value="weeklySpecific">Giorni specifici della settimana</option>
+                  <option value="everyXMonths">Ogni X mesi</option>
+                  <option value="yearly">Annuale</option>
+                </select>
+              </div>
+
+              <div class="field-row rec-interval-row" id="rec-expense-interval-row">
+                <div class="field-group half">
+                  <label>Intervallo</label>
+                  <input type="number" id="rec-expense-interval" min="1" value="1">
+                </div>
+              </div>
+
+              <div class="field-group rec-weekdays-row hidden" id="rec-expense-weekdays-row">
+                <label>Giorni della settimana</label>
+                <div class="weekday-group" id="rec-expense-weekdays">
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="1">L
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="2">M
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="3">M
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="4">G
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="5">V
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="6">S
+                  </label>
+                  <label class="weekday-chip">
+                    <input type="checkbox" value="7">D
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" id="rec-expense-submit" class="btn primary full-width">
+                  Aggiungi spesa ricorrente
+                </button>
+                <button type="button" id="rec-expense-cancel" class="btn ghost full-width hidden">
+                  Annulla modifica
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Categoria</th>
+                  <th>Ricorrenza</th>
+                  <th>Dal</th>
+                  <th>Al</th>
+                  <th>Conto</th>
+                  <th class="align-right">Importo</th>
+                  <th class="align-center">Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="rec-expense-list">
+                <!-- Spese ricorrenti -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    /* =========================================
+   NEO BUDGET - UI SYSTEM
+   Mobile-first, clean, premium look
+========================================= */
+
+/* Reset di base */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #111328 0, #050612 45%, #010208 100%);
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   TOKEN / DESIGN SYSTEM
+========================================= */
+
+:root {
+  --bg-main: #050613;
+  --bg-elevated: rgba(11, 13, 35, 0.98);
+  --bg-elevated-soft: rgba(16, 20, 55, 0.98);
+
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-border-strong: rgba(255, 255, 255, 0.12);
+
+  --accent: #7b5cff;
+  --accent-soft: rgba(123, 92, 255, 0.35);
+  --accent-strong: #c99bff;
+
+  --text-main: #f7f8ff;
+  --text-muted: #a0a4c7;
+  --text-subtle: #787eaa;
+
+  --success: #6bf5c0;
+  --danger: #ff6689;
+  --warning: #ffd56b;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 18px 36px rgba(0, 0, 0, 0.55);
+  --shadow-strong: 0 26px 60px rgba(0, 0, 0, 0.7);
+
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+
+  --anim-fast: 0.16s ease-out;
+  --anim-med: 0.25s ease-out;
+}
+
+/* =========================================
+   APP WRAPPER / LAYOUT MOBILE
+========================================= */
+
+body {
+  background-color: var(--bg-main);
+}
+
+.app-shell {
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-12) var(--space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.app-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-14) var(--space-16);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(180, 170, 255, 0.3);
+  background:
+    radial-gradient(circle at 0 0, rgba(199, 155, 255, 0.28), transparent 60%),
+    linear-gradient(135deg, rgba(6, 10, 40, 0.98), rgba(3, 5, 20, 0.96));
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 15% 0, #ffffff 0, #f9f2ff 18%, transparent 32%),
+    radial-gradient(circle at 15% 100%, #7b5cff 0, #312658 32%, #000 70%);
+  box-shadow: 0 0 24px rgba(123, 92, 255, 0.9);
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: var(--fs-lg);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand-text span {
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+}
+
+.header-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.date-filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.date-filter-label input[type="date"] {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: var(--space-6) var(--space-10);
+  background: rgba(6, 8, 28, 0.96);
+  color: var(--text-main);
+  font-size: var(--fs-sm);
+  outline: none;
+}
+
+.date-filter-label input[type="date"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+/* =========================================
+   KPI GRID
+========================================= */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+}
+
+.kpi-card {
+  position: relative;
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top left, rgba(123, 92, 255, 0.3), transparent 60%),
+    var(--bg-elevated);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.kpi-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at bottom right, rgba(23, 245, 203, 0.14), transparent 65%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.kpi-label {
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.kpi-value {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+
+/* =========================================
+   LAYOUT PRINCIPALE
+========================================= */
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* Sidebar (in alto su mobile) */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* Content (tabs + tabelle) */
+.content {
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at top right, rgba(123, 92, 255, 0.22), transparent 60%),
+    var(--bg-elevated-soft);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-strong);
+}
+
+/* =========================================
+   PANELS / FORM CONTAINER
+========================================= */
+
+.panel {
+  padding: var(--space-14) var(--space-14) var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.inline-panel {
+  margin-bottom: var(--space-12);
+}
+
+.panel h2,
+.panel h3 {
+  margin-bottom: var(--space-10);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   FORMS / CAMPI
+========================================= */
+
+.field-group {
+  margin-bottom: var(--space-10);
+}
+
+.field-group label {
+  display: block;
+  font-size: var(--fs-xs);
+  margin-bottom: var(--space-4);
+  color: var(--text-muted);
+}
+
+.field-row {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.field-group.half {
+  flex: 1;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: var(--space-8) var(--space-10);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(7, 8, 28, 0.98);
+  color: var(--text-main);
+  font-size: var(--fs-sm);
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(156, 163, 199, 0.7);
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+/* Radio chip (Entrata/Uscita) */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 7, 26, 0.95);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--anim-fast), border-color var(--anim-fast), color var(--anim-fast);
+}
+
+.chip input {
+  display: none;
+}
+
+.chip input:checked + span {
+  color: var(--accent-strong);
+}
+
+.chip input:checked ~ span {
+  color: var(--accent-strong);
+}
+
+.chip:hover {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(7, 9, 28, 0.96);
+  color: var(--text-main);
+  font-size: var(--fs-sm);
+  padding: var(--space-8) var(--space-14);
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  width: auto;
+  transition:
+    transform var(--anim-fast),
+    box-shadow var(--anim-fast),
+    border-color var(--anim-fast),
+    background var(--anim-fast);
+}
+
+.btn.primary {
+  background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(123, 92, 255, 0.7);
+}
+
+.btn.danger {
+  background: linear-gradient(120deg, #ff4f7c, #ff86a5);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(255, 79, 124, 0.65);
+}
+
+.btn.ghost {
+  background: transparent;
+  border-style: dashed;
+}
+
+.btn.full-width {
+  width: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.6);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+}
+
+/* Form actions */
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+  display: inline-flex;
+  padding: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: rgba(4, 7, 26, 0.98);
+  border: 1px solid rgba(123, 92, 255, 0.4);
+  margin-bottom: var(--space-8);
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  color: var(--text-subtle);
+  font-size: var(--fs-sm);
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--anim-med), color var(--anim-med), transform var(--anim-fast);
+}
+
+.tab.active {
+  background: radial-gradient(circle at top, rgba(123, 92, 255, 0.95), rgba(10, 13, 40, 0.9));
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* =========================================
+   TABELLE
+========================================= */
+
+.table-wrapper {
+  margin-top: var(--space-8);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(123, 92, 255, 0.13), transparent 60%),
+    rgba(4, 6, 22, 0.98);
+  box-shadow: var(--shadow-soft);
+  overflow-x: auto;
+}
+
+/* Scroll orizzontale fluido su mobile */
+.table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+.table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.data-table thead {
+  background: rgba(8, 10, 35, 0.98);
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-8) var(--space-10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.data-table th {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-subtle);
+  text-align: left;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(18, 22, 58, 0.96);
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-center {
+  text-align: center;
+}
+
+/* Badges */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.badge-income {
+  border-color: rgba(111, 243, 191, 0.7);
+  color: #9cfad3;
+}
+
+.badge-expense {
+  border-color: rgba(255, 105, 146, 0.8);
+  color: #ffb2c7;
+}
+
+.badge-liquid {
+  border-color: rgba(123, 92, 255, 0.8);
+  color: #d2c4ff;
+}
+
+.badge-invested {
+  border-color: rgba(15, 208, 255, 0.8);
+  color: #9be8ff;
+}
+
+/* Amount colors */
+
+.amount-positive {
+  color: #9cfad3;
+}
+
+.amount-negative {
+  color: #ffb2c7;
+}
+
+/* Icon buttons (edit/delete) */
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  cursor: pointer;
+  color: var(--text-subtle);
+  font-size: 14px;
+  transition: color var(--anim-fast), transform var(--anim-fast);
+}
+
+.icon-btn:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   RICORRENZE - WEEKDAYS & INTERVAL
+========================================= */
+
+.rec-interval-row {
+  margin-bottom: var(--space-6);
+}
+
+.rec-weekdays-row {
+  margin-bottom: var(--space-6);
+}
+
+.weekday-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.weekday-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(6, 9, 28, 0.98);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--anim-fast), border-color var(--anim-fast), transform var(--anim-fast);
+}
+
+.weekday-chip input {
+  display: none;
+}
+
+.weekday-chip input:checked + span,
+.weekday-chip input:checked ~ span {
+  color: var(--accent-strong);
+}
+
+.weekday-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+/* =========================================
+   UTILITIES / ANIMAZIONI
+========================================= */
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE BREAKPOINTS
+========================================= */
+
+/* Mobile small: già ok di default */
+
+/* ≥ 480px */
+@media (min-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ≥ 768px (tablet) */
+@media (min-width: 768px) {
+  .app-main {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: var(--space-14);
+  }
+
+  .sidebar {
+    order: 1;
+  }
+
+  .content {
+    order: 2;
+  }
+}
+
+/* ≥ 960px (desktop medio) */
+@media (min-width: 960px) {
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-controls {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-10);
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ≥ 1200px */
+@media (min-width: 1200px) {
+  .app-shell {
+    padding-top: var(--space-16);
+  }
+}
+  </style>
+  <script src="app.js" defer></script>
+</body>
+</html>

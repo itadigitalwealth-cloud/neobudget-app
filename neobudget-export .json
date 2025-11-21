@@ -1,0 +1,216 @@
+{
+  "movements": [
+    {
+      "id": "M_1763726061202_50735",
+      "type": "income",
+      "accountType": "liquid",
+      "category": "Inizio",
+      "amount": 10290,
+      "date": "2025-11-21",
+      "note": "Inizializzo conto"
+    },
+    {
+      "id": "M_1763726235802_11026",
+      "type": "income",
+      "accountType": "liquid",
+      "category": "Tredicesima",
+      "amount": 3000,
+      "date": "2025-12-19",
+      "note": "Tredicesima"
+    },
+    {
+      "id": "M_1763726251454_90578",
+      "type": "income",
+      "accountType": "liquid",
+      "category": "Tredicesima",
+      "amount": 3000,
+      "date": "2026-12-18",
+      "note": "Tredicesima"
+    },
+    {
+      "id": "M_1763726298472_84965",
+      "type": "income",
+      "accountType": "liquid",
+      "category": "Bonifico",
+      "amount": 20000,
+      "date": "2025-11-21",
+      "note": "Bonifico"
+    },
+    {
+      "id": "M_1763727683242_30487",
+      "type": "expense",
+      "accountType": "liquid",
+      "category": "Saldo macchina",
+      "amount": 31700,
+      "date": "2025-12-10",
+      "note": "Saldo macchina"
+    },
+    {
+      "id": "M_1763727813530_81436",
+      "type": "expense",
+      "accountType": "liquid",
+      "category": "Regali natale",
+      "amount": 400,
+      "date": "2025-12-16",
+      "note": "Regali natale"
+    },
+    {
+      "id": "M_1763727837330_15799",
+      "type": "expense",
+      "accountType": "liquid",
+      "category": "Bormio",
+      "amount": 180,
+      "date": "2025-12-10",
+      "note": "Weekend Bormio"
+    },
+    {
+      "id": "M_1763727940836_39081",
+      "type": "income",
+      "accountType": "liquid",
+      "category": "Macchina venduta",
+      "amount": 7500,
+      "date": "2025-12-18",
+      "note": "Vendita macchina"
+    },
+    {
+      "id": "M_1763728013827_90457",
+      "type": "expense",
+      "accountType": "liquid",
+      "category": "Tasse",
+      "amount": 980,
+      "date": "2025-12-29",
+      "note": "Tasse bollo e superbollo"
+    },
+    {
+      "id": "M_1763728087243_33385",
+      "type": "expense",
+      "accountType": "liquid",
+      "category": "Rimborso",
+      "amount": 6000,
+      "date": "2025-12-22",
+      "note": "Rimborso macchina 1"
+    }
+  ],
+  "recurring": [
+    {
+      "type": "income",
+      "name": "Stipendio",
+      "amount": 3000,
+      "accountType": "liquid",
+      "category": "Stipendio",
+      "startDate": "2025-11-28",
+      "endDate": null,
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763724604500_72750"
+    },
+    {
+      "type": "expense",
+      "name": "Benzina",
+      "amount": 25,
+      "accountType": "liquid",
+      "category": "Benzina",
+      "startDate": "2025-11-23",
+      "endDate": null,
+      "recurrence": {
+        "mode": "everyXDays",
+        "interval": 6
+      },
+      "id": "R_1763725743694_66434"
+    },
+    {
+      "type": "expense",
+      "name": "Assicurazione",
+      "amount": 306,
+      "accountType": "liquid",
+      "category": "Assicurazione",
+      "startDate": "2025-12-15",
+      "endDate": null,
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763725810070_67018"
+    },
+    {
+      "type": "expense",
+      "name": "Garage",
+      "amount": 150,
+      "accountType": "liquid",
+      "category": "Garage",
+      "startDate": "2025-12-01",
+      "endDate": null,
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763725836739_16947"
+    },
+    {
+      "type": "expense",
+      "name": "Taglio Capelli",
+      "amount": 15,
+      "accountType": "liquid",
+      "category": "Sfizi",
+      "startDate": "2025-12-04",
+      "endDate": null,
+      "recurrence": {
+        "mode": "weekly",
+        "interval": 2
+      },
+      "id": "R_1763725903085_2846"
+    },
+    {
+      "type": "expense",
+      "name": "Rata telefono",
+      "amount": 93.43,
+      "accountType": "liquid",
+      "category": "Rate",
+      "startDate": "2025-12-20",
+      "endDate": "2026-07-20",
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763725945483_48097"
+    },
+    {
+      "type": "expense",
+      "name": "Uscite",
+      "amount": 20,
+      "accountType": "liquid",
+      "category": "Sfizi",
+      "startDate": "2025-11-21",
+      "endDate": null,
+      "recurrence": {
+        "mode": "everyXDays",
+        "interval": 7
+      },
+      "id": "R_1763725979143_83570"
+    },
+    {
+      "type": "expense",
+      "name": "Chatgbt",
+      "amount": 30,
+      "accountType": "liquid",
+      "category": "Sfizi",
+      "startDate": "2025-12-01",
+      "endDate": null,
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763727758462_49990"
+    },
+    {
+      "type": "expense",
+      "name": "Spotify",
+      "amount": 5,
+      "accountType": "liquid",
+      "category": "Sfizi",
+      "startDate": "2025-12-22",
+      "endDate": null,
+      "recurrence": {
+        "mode": "monthly"
+      },
+      "id": "R_1763727787033_73373"
+    }
+  ]
+}
