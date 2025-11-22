@@ -235,6 +235,182 @@ function generateCategorySummary(selectedDate) {
   console.log("=== RESOCONTO FINE ===");
 }
 
+let monthChart = null;
+
+function getMonthlyBalanceData(selectedDate) {
+    const date = new Date(selectedDate);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    const monthStart = new Date(year, month, 1);
+    const monthEnd = new Date(year, month + 1, 0);
+    const daysInMonth = monthEnd.getDate();
+
+    // ============================================
+    // 1. CALCOLO LIQUIDITÀ PRIMA DEL MESE
+    // ============================================
+    let startingLiquidity = 0;
+
+    const beforeMonthMovs = [
+        ...state.movements,
+        ...generateRecurringOccurrences(monthEnd)
+    ].filter(m => {
+        const d = parseDate(m.date);
+        return d && d < monthStart && m.accountType === "liquid";
+    });
+
+    for (const m of beforeMonthMovs) {
+        startingLiquidity += m.type === "income" ? m.amount : -m.amount;
+    }
+
+    // ============================================
+    // 2. MOVIMENTI SOLO DEL MESE
+    // ============================================
+    const monthMovs = [
+        ...state.movements,
+        ...generateRecurringOccurrences(monthEnd)
+    ].filter(m => {
+        const d = parseDate(m.date);
+        return d && d >= monthStart && d <= monthEnd && m.accountType === "liquid";
+    });
+
+    // Ordino
+    monthMovs.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+
+    // ============================================
+    // 3. COSTRUISCO ARRAY GIORNI
+    // ============================================
+    const daily = Array.from({ length: daysInMonth }, (_, i) => ({
+        day: i + 1,
+        value: 0
+    }));
+
+    // ============================================
+    // 4. CALCO CUMULATO GIORNO PER GIORNO
+    // ============================================
+    let current = startingLiquidity;
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(year, month, day);
+
+        for (const mov of monthMovs) {
+            const md = parseDate(mov.date);
+            if (md.getDate() === day) {
+                current += mov.type === "income" ? mov.amount : -mov.amount;
+            }
+        }
+
+        daily[day - 1].value = current;
+    }
+
+    return daily;
+}
+
+
+
+
+function renderMonthlyChart(selectedDate) {
+    const data = getMonthlyBalanceData(selectedDate);
+
+ const options = {
+    series: [{
+        name: "Liquidità",
+        data: data.map(d => d.value)
+    }],
+    chart: {
+        type: "area",
+        height: 260,
+        toolbar: { show: false },
+        animations: {
+            enabled: true,
+            easing: "easeinout",
+            speed: 550
+        },
+        zoom: { enabled: false }
+    },
+    stroke: {
+        curve: "smooth",
+        width: 4,
+        colors: ["#c8d0ff"]
+    },
+    fill: {
+        type: "gradient",
+        gradient: {
+            shadeIntensity: 0.9,
+            opacityFrom: 0.4,
+            opacityTo: 0.05,
+            stops: [0, 50, 100],
+            colorStops: [
+                { offset: 0, color: "#7f8dff", opacity: 0.35 },
+                { offset: 50, color: "#a5b1ff", opacity: 0.18 },
+                { offset: 100, color: "#ffffff", opacity: 0.07 }
+            ]
+        }
+    },
+    dataLabels: { enabled: false },
+    markers: {
+        size: 0,
+        hover: { size: 6 }
+    },
+    grid: {
+        borderColor: "rgba(255,255,255,0.08)",
+        padding: {
+            left: 10,
+            right: 10,
+            top: 0,
+            bottom: -10
+        }
+    },
+    xaxis: {
+        categories: data.map(d => d.day),
+        tickAmount: 6,
+        labels: {
+            rotate: 0,
+            style: { color: "#bfc3e1", fontSize: "12px" },
+            formatter: (value) => {
+                const v = Number(value);
+                return [1,5,10,15,20,25,30].includes(v) ? v : "";
+            }
+        },
+        tooltip: { enabled: false }
+    },
+    yaxis: {
+        decimalsInFloat: 0,
+        forceNiceScale: true,
+        labels: {
+            formatter: (v) => v.toFixed(0),
+            style: { color: "#bfc3e1", fontSize: "12px" }
+        }
+    },
+    tooltip: {
+        theme: "dark",
+        marker: { show: false },
+        y: {
+            formatter: (v) => `${v.toFixed(2)} €`
+        }
+    }
+};
+
+
+
+    if (monthChart) {
+        monthChart.updateOptions(options);
+        return;
+    }
+
+    monthChart = new ApexCharts(document.querySelector("#chart-month"), options);
+    monthChart.render();
+}
+
+document.getElementById("dateFilter").addEventListener("change", e => {
+    renderMonthlyChart(e.target.value);
+});
+
+const today = new Date().toISOString().substring(0, 10);
+document.getElementById("dateFilter").value = today;
+renderMonthlyChart(today);
+
+
 
 function generateRecurringOccurrences(targetDate) {
   const occurrences = [];
