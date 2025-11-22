@@ -179,6 +179,62 @@ function generateYearly(r, start, end, out) {
     current = addMonths(current, 12);
   }
 }
+function generateCategorySummary(selectedDate) {
+  console.log("=== RESOCONTO START ===");
+  console.log("selectedDate:", selectedDate);
+
+  const list = document.getElementById("summary-list");
+  console.log("summary-list trovato?", !!list);
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  const baseMovs = state.movements.filter(m => {
+    const d = parseDate(m.date);
+    console.log("MOV:", m, "parsedDate:", d);
+    return d && d <= selectedDate;
+  });
+
+  console.log("baseMovs:", baseMovs);
+
+  const recMovs = generateRecurringOccurrences(selectedDate);
+  console.log("recMovs:", recMovs);
+
+  const all = [...baseMovs, ...recMovs];
+  console.log("ALL MOVS:", all);
+
+  if (all.length === 0) {
+    console.log("ZERO MOVIMENTI");
+    list.innerHTML = `<div class="summary-item"><span>Nessun dato disponibile</span></div>`;
+    return;
+  }
+
+  const map = {};
+
+  all.forEach(m => {
+    const cat = m.category?.trim() || "Senza categoria";
+    if (!map[cat]) map[cat] = 0;
+    if (m.type === "income") map[cat] += Number(m.amount) || 0;
+    else map[cat] -= Number(m.amount) || 0;
+  });
+
+  console.log("MAP FINALE:", map);
+
+  Object.entries(map).forEach(([cat, val]) => {
+    const div = document.createElement("div");
+    div.className = "summary-item";
+
+    div.innerHTML = `
+      <span>${cat}</span>
+      <span style="font-weight:600;color:${val >= 0 ? '#6bf5c0' : '#ff6689'}">${val.toFixed(2)} €</span>
+    `;
+
+    list.appendChild(div);
+  });
+
+  console.log("=== RESOCONTO FINE ===");
+}
+
 
 function generateRecurringOccurrences(targetDate) {
   const occurrences = [];
@@ -955,6 +1011,8 @@ function resetAll() {
   renderKpi();
 }
 
+
+
 /* ====================== DATE FILTER ====================== */
 
 function initDateFilter() {
@@ -966,15 +1024,19 @@ function initDateFilter() {
   const todayStr = `${yyyy}-${mm}-${dd}`;
   dateInput.value = todayStr;
 
-  dateInput.addEventListener('change', () => {
+  const refresh = () => {
     renderKpi();
-  });
+    generateCategorySummary(parseDate(dateInput.value));
+  };
+
+  dateInput.addEventListener('change', refresh);
 
   document.getElementById('btnToday').addEventListener('click', () => {
     dateInput.value = todayStr;
-    renderKpi();
+    refresh();
   });
 }
+
 
 /* ====================== INIT ====================== */
 
