@@ -51,6 +51,12 @@
       </div>
     </section>
 
+    <section class="chart-panel">
+  <h2 class="chart-title">Andamento del mese</h2>
+  <div id="chart-month" class="chart-container"></div>
+</section>
+
+
    <section class="summary-grid">
   <h2 class="summary-title">Resoconto per categoria</h2>
   <div id="summary-list" class="summary-list"></div>
@@ -1716,8 +1722,35 @@ input[type="date"] {
   box-sizing: border-box;
 }
 
+.chart-panel {
+  padding: 18px 18px 20px;
+  border-radius: 26px;
+  margin-top: 6px;
+  background:
+    radial-gradient(circle at top left, rgba(127, 141, 255, 0.22), transparent 60%),
+    rgba(3, 4, 18, 0.98);
+  border: 1px solid rgba(207, 212, 255, 0.18);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(24px);
+}
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 260px;
+}
+
+
 
   </style>
   <script src="app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </body>
 </html>
