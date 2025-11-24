@@ -12,6 +12,11 @@ let editingRecurringIncomeId = null;
 let editingRecurringExpenseId = null;
 
 /* ====================== HELPERS BASE ====================== */
+function getSelectedType() {
+  const btn = document.querySelector(".type-btn.active");
+  return btn ? btn.dataset.type : null;
+}
+
 
 function loadState() {
   try {
@@ -674,8 +679,12 @@ function resetMovementForm() {
 function handleMovementSubmit(e) {
   e.preventDefault();
   const form = document.getElementById('mov-form');
-  const type =
-    form.querySelector('input[name="mov-type"]:checked')?.value || 'income';
+  const type = getSelectedType();
+if (!type) {
+  alert("Seleziona Entrata o Uscita");
+  return;
+}
+
   const accountType = document.getElementById('mov-account').value || 'liquid';
   const category = document.getElementById('mov-category').value.trim();
   const amountStr = document.getElementById('mov-amount').value;
@@ -713,10 +722,13 @@ function handleMovementSubmit(e) {
     });
   }
 
-  saveState();
-  resetMovementForm();
-  renderMovements();
-  renderKpi();
+saveState();
+resetMovementForm();
+renderMovements();
+renderKpi();
+generateCategorySummary(parseDate(date));
+renderMonthlyChart(date);
+
 }
 
 function handleMovementListClick(e) {
@@ -1213,6 +1225,97 @@ function initDateFilter() {
   });
 }
 
+/* ============================
+   BOTTOM NAVIGATION iOS STYLE
+============================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        // Rimuove active da tutti
+        document.querySelectorAll(".bottom-nav .nav-item")
+            .forEach(n => n.classList.remove("active"));
+
+        // Attiva quello cliccato
+        btn.classList.add("active");
+
+        const target = btn.getAttribute("data-tab-target");
+
+        // Nasconde tutte le schermate principali
+        document.querySelectorAll(".app-view")
+            .forEach(v => v.classList.add("hidden"));
+
+        // Mostra la view basata sul target
+        const view = document.getElementById("view-" + target);
+        if (view) view.classList.remove("hidden");
+
+        // Special actions
+        if (target === "home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        if (target === "settings") {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+
+        // Se entrando in Movimenti → attiva la tab interna movimenti
+        if (target === "movimenti") {
+            document.querySelector(`[data-tab="movimenti"]`)?.click();
+        }
+
+        // Se entrando in Ricorrenti → attiva la tab interna entrate
+        if (target === "ricorrenti") {
+            document.querySelector(`[data-tab="entrate"]`)?.click();
+        }
+
+    });
+
+  });
+
+});
+
+const typeBtns = document.querySelectorAll(".type-btn");
+const collapse = document.getElementById("movementForm");
+
+let isOpen = false;
+let activeType = null;
+
+typeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const clickedType = btn.dataset.type;
+
+    // CASO 1: clicchi lo stesso pulsante che è già attivo → CHIUDI
+    if (activeType === clickedType && isOpen) {
+      typeBtns.forEach(b => b.classList.remove("active"));
+      collapse.style.maxHeight = "0";
+      collapse.style.opacity = "0";
+      isOpen = false;
+      activeType = null;
+      return;
+    }
+
+    // CASO 2: clicchi l'altro pulsante → CAMBIO TIPO + APRO
+    typeBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeType = clickedType;
+
+    // APRE SEMPRE SE CAMBIO TIPO
+    collapse.style.maxHeight = "900px";
+    collapse.style.opacity = "1";
+    isOpen = true;
+  });
+});
+
+
+
+
+
 
 /* ====================== INIT ====================== */
 
@@ -1274,6 +1377,215 @@ function init() {
   renderMovements();
   renderRecurring();
   renderKpi();
+  
 }
+
+/* ============================================
+   PATCH RICORRENTI – compatibilità nuovo layout
+============================================ */
+
+let currentRecType = "income"; 
+// "income" o "expense"
+
+// TABS RICORRENTI
+document.querySelectorAll("#rec-tabs .tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll("#rec-tabs .tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    currentRecType = tab.dataset.recType; // income | expense
+
+    // Cambia titolo
+    document.getElementById("rec-form-title").textContent =
+      currentRecType === "income"
+        ? "Nuova entrata ricorrente"
+        : "Nuova spesa ricorrente";
+
+    // Cambia placeholder categoria
+    document.getElementById("rec-category").placeholder =
+      currentRecType === "income" ? "Es. Stipendio" : "Es. Affitto";
+
+    // Cambia pulsante
+    document.getElementById("rec-submit").textContent =
+      currentRecType === "income"
+        ? "Aggiungi entrata ricorrente"
+        : "Aggiungi spesa ricorrente";
+
+    renderUnifiedRecurring();
+  });
+});
+
+// ==========================
+// SUBMIT UNICO RICORRENTE
+// ==========================
+
+document.getElementById("rec-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const obj = {
+    type: currentRecType,
+    name: document.getElementById("rec-name").value.trim(),
+    amount: Number(document.getElementById("rec-amount").value),
+    accountType: document.getElementById("rec-account").value,
+    category: document.getElementById("rec-category").value.trim(),
+    startDate: document.getElementById("rec-start").value,
+    endDate: document.getElementById("rec-end").value || null,
+    recurrence: {
+      mode: document.getElementById("rec-mode").value,
+      interval: Number(document.getElementById("rec-interval").value) || 1,
+      daysOfWeek: Array.from(
+        document.querySelectorAll("#rec-weekdays input:checked")
+      ).map(x => Number(x.value))
+    }
+  };
+
+  if (!obj.name || !obj.startDate || obj.amount <= 0) {
+    alert("Compila almeno nome, data di inizio e importo valido.");
+    return;
+  }
+
+  // MODIFICA o NUOVO?
+  if (window._editingRecurringId) {
+    const idx = state.recurring.findIndex(r => r.id === window._editingRecurringId);
+    if (idx >= 0) {
+      state.recurring[idx] = { ...state.recurring[idx], ...obj };
+    }
+    window._editingRecurringId = null;
+    document.getElementById("rec-cancel").classList.add("hidden");
+    document.getElementById("rec-submit").textContent =
+      currentRecType === "income" ? "Aggiungi entrata ricorrente" : "Aggiungi spesa ricorrente";
+  } else {
+    obj.id = generateId("R");
+    state.recurring.push(obj);
+  }
+
+  saveState();
+  resetUnifiedRecForm();
+  renderUnifiedRecurring();
+});
+
+// ==========================
+// CANCELLA MODIFICA
+// ==========================
+
+document.getElementById("rec-cancel").addEventListener("click", () => {
+  window._editingRecurringId = null;
+  resetUnifiedRecForm();
+});
+
+// ==========================
+// RESET FORM
+// ==========================
+
+function resetUnifiedRecForm() {
+  document.getElementById("rec-form").reset();
+  document.getElementById("rec-cancel").classList.add("hidden");
+  document.getElementById("rec-submit").textContent =
+    currentRecType === "income" ? "Aggiungi entrata ricorrente" : "Aggiungi spesa ricorrente";
+
+  // Nasconde parti dinamiche
+  document.getElementById("rec-interval-row").classList.add("hidden");
+  document.getElementById("rec-weekdays-row").classList.add("hidden");
+}
+
+// ==========================
+// RENDER LISTA UNIFICATA
+// ==========================
+
+function renderUnifiedRecurring() {
+  const list = document.getElementById("rec-list");
+  list.innerHTML = "";
+
+  const items = state.recurring.filter(r => r.type === currentRecType);
+
+  if (!items.length) {
+    list.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:12px 0;">Nessun elemento.</td></tr>`;
+    return;
+  }
+
+  for (const r of items) {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${r.name || "-"}</td>
+      <td>${r.category || "-"}</td>
+      <td>${recurrenceLabel(r)}</td>
+      <td>${formatDate(r.startDate)}</td>
+      <td>${r.endDate ? formatDate(r.endDate) : "∞"}</td>
+      <td><span class="badge ${r.accountType === "invested" ? "badge-invested" : "badge-liquid"}">
+        ${r.accountType === "invested" ? "Investito" : "Liquidità"}
+      </span></td>
+      <td class="align-right ${currentRecType === "income" ? "amount-positive" : "amount-negative"}">
+        ${formatCurrency(r.amount)}
+      </td>
+      <td class="align-center">
+        <button class="icon-btn" data-action="edit" data-id="${r.id}">✏</button>
+        <button class="icon-btn" data-action="delete" data-id="${r.id}">🗑</button>
+      </td>
+    `;
+
+    list.appendChild(tr);
+  }
+}
+
+// ==========================
+// CLICK EDIT / DELETE
+// ==========================
+
+document.getElementById("rec-list").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-action]");
+  if (!btn) return;
+
+  const action = btn.dataset.action;
+  const id = btn.dataset.id;
+
+  if (action === "delete") {
+    if (confirm("Eliminare questa ricorrenza?")) {
+      state.recurring = state.recurring.filter(r => r.id !== id);
+      saveState();
+      renderUnifiedRecurring();
+      renderKpi();
+    }
+    return;
+  }
+
+  if (action === "edit") {
+    const r = state.recurring.find(x => x.id === id);
+    if (!r) return;
+
+    window._editingRecurringId = id;
+
+    document.getElementById("rec-name").value = r.name;
+    document.getElementById("rec-amount").value = r.amount;
+    document.getElementById("rec-account").value = r.accountType;
+    document.getElementById("rec-category").value = r.category;
+    document.getElementById("rec-start").value = r.startDate;
+    document.getElementById("rec-end").value = r.endDate || "";
+
+    document.getElementById("rec-mode").value = r.recurrence.mode;
+    document.getElementById("rec-interval").value = r.recurrence.interval || 1;
+
+    // weekdays
+    document.querySelectorAll("#rec-weekdays input").forEach(c => {
+      c.checked = r.recurrence.daysOfWeek?.includes(Number(c.value)) || false;
+    });
+
+    // mostra righe giuste
+    document.getElementById("rec-interval-row").classList.toggle(
+      "hidden",
+      !["everyXDays", "weekly", "everyXMonths"].includes(r.recurrence.mode)
+    );
+
+    document.getElementById("rec-weekdays-row").classList.toggle(
+      "hidden",
+      r.recurrence.mode !== "weeklySpecific"
+    );
+
+    // mostra bottone annulla
+    document.getElementById("rec-cancel").classList.remove("hidden");
+    document.getElementById("rec-submit").textContent = "Salva modifica";
+  }
+});
+
 
 document.addEventListener('DOMContentLoaded', init);
