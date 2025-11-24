@@ -1331,35 +1331,6 @@ function init() {
   });
   document.getElementById('mov-list').addEventListener('click', handleMovementListClick);
 
-  // Ricorrenti entrate
-  document
-    .getElementById('rec-income-form')
-    .addEventListener('submit', handleRecurringSubmit.bind(null, 'income'));
-  document.getElementById('rec-income-cancel').addEventListener('click', () => {
-    resetRecurringForm('income');
-  });
-  document
-    .getElementById('rec-income-list')
-    .addEventListener('click', e => handleRecurringListClick('income', e));
-  document
-    .getElementById('rec-income-mode')
-    .addEventListener('change', () => updateRecurrenceUi('income'));
-  updateRecurrenceUi('income');
-
-  // Ricorrenti spese
-  document
-    .getElementById('rec-expense-form')
-    .addEventListener('submit', handleRecurringSubmit.bind(null, 'expense'));
-  document.getElementById('rec-expense-cancel').addEventListener('click', () => {
-    resetRecurringForm('expense');
-  });
-  document
-    .getElementById('rec-expense-list')
-    .addEventListener('click', e => handleRecurringListClick('expense', e));
-  document
-    .getElementById('rec-expense-mode')
-    .addEventListener('change', () => updateRecurrenceUi('expense'));
-  updateRecurrenceUi('expense');
 
   // Export / import / reset
   document.getElementById('btnExport').addEventListener('click', exportJson);
