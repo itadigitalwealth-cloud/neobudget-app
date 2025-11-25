@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>NeoBudget - Movimenti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Icons -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="general.css">
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+
+<body>
+
+<div class="mov-shell">
+
+  <!-- NEW HEADER / PILL -->
+  <header class="mov-island">
+
+    <div class="mov-island-left">
+      <div class="mov-icon-orb">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </div>
+      <div class="mov-title">
+        <h1>Movimenti</h1>
+        <p>Gestione avanzata</p>
+      </div>
+    </div>
+
+    <div class="mov-island-right">
+      <button class="mov-pill-btn" data-type="income">
+        <ion-icon name="arrow-up-circle-outline"></ion-icon>
+        Entrata
+      </button>
+
+      <button class="mov-pill-btn" data-type="expense">
+        <ion-icon name="arrow-down-circle-outline"></ion-icon>
+        Uscita
+      </button>
+    </div>
+
+  </header>
+
+
+  <!-- FORM COLLAPSABILE -->
+  <section id="movementForm" class="mov-form-card">
+
+    <form id="mov-form">
+
+      <div class="form-row">
+        <div class="field">
+          <label>Conto</label>
+          <select id="mov-account">
+            <option value="liquid">Liquidità</option>
+            <option value="invested">Investito</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Categoria</label>
+          <input type="text" id="mov-category" placeholder="Es. Spesa, Stipendio...">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Importo</label>
+          <input type="number" id="mov-amount" step="0.01" placeholder="0,00">
+        </div>
+
+        <div class="field">
+          <label>Data</label>
+          <input type="date" id="mov-date">
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>Note</label>
+        <textarea id="mov-note" placeholder="Aggiungi una nota"></textarea>
+      </div>
+
+      <button class="btn primary full" id="mov-submit">Salva movimento</button>
+      <button type="button" class="btn danger full hidden" id="mov-cancel">Annulla modifica</button>
+
+    </form>
+
+  </section>
+
+
+  <!-- LISTA MOVIMENTI -->
+  <section class="mov-list-card">
+
+    <h2 class="list-title">Storico</h2>
+
+    <div class="mov-list" id="mov-list"></div>
+
+  </section>
+
+</div>
+
+
+<!-- NAV FIXED -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="index.html"><ion-icon class="nav-icon" name="home-outline"></ion-icon></a>
+  <a class="nav-item active" href="second.html"><ion-icon class="nav-icon" name="document-text-outline"></ion-icon></a>
+  <a class="nav-item" href="third.html"><ion-icon class="nav-icon" name="repeat-outline"></ion-icon></a>
+  <a class="nav-item" href="fourth.html"><ion-icon class="nav-icon" name="settings-outline"></ion-icon></a>
+</nav>
+
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>

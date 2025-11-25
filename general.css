@@ -1,0 +1,353 @@
+/* ============================================================
+   RESET BASE
+============================================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", Inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: radial-gradient(circle at 40% 20%, #283046, #10121a);
+  color: #fff;
+}
+
+/* Safe area */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Hide */
+.hidden {
+  display: none !important;
+}
+
+
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+
+  /* Colors */
+  --text-main: #f5f6ff;
+  --text-muted: #a4a7c7;
+  --text-soft: #7c81aa;
+
+  --accent: #8c98ff;
+  --accent-soft: rgba(140, 152, 255, 0.45);
+  --accent-strong: #c7cbff;
+
+  --success: #65f0c0;
+  --danger: #ff6a93;
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Shadow */
+  --shadow-soft: 0 14px 32px rgba(0,0,0,0.55);
+  --shadow-strong: 0 22px 50px rgba(0,0,0,0.60);
+
+  /* Blur */
+  --blur-soft: 16px;
+  --blur-strong: 28px;
+
+  /* Spacing */
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+
+  /* Font sizes */
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 26px;
+}
+
+
+/* ============================================================
+   PANELS – VisionOS Glass
+============================================================ */
+.panel {
+  padding: 22px 22px 26px;
+  border-radius: var(--radius-xl);
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(var(--blur-strong)) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.14);
+
+  box-shadow:
+    0 18px 38px rgba(0,0,0,0.55),
+    inset 0 0 24px rgba(255,255,255,0.06);
+
+  transition: 0.25s ease;
+}
+
+.panel:hover {
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.65),
+    inset 0 0 28px rgba(255,255,255,0.06);
+}
+
+
+/* ============================================================
+   INPUTS / SELECT
+============================================================ */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: var(--fs-sm);
+  color: #fff;
+
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.18);
+
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(var(--blur-soft));
+
+  transition: 0.25s ease;
+  appearance: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(170,160,255,0.85);
+  background: rgba(255,255,255,0.16);
+  box-shadow:
+    0 0 0 1px rgba(170,160,255,0.45),
+    0 0 22px rgba(170,160,255,0.45);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   BUTTON
+============================================================ */
+.btn {
+  width: 100%;
+  padding: 14px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.16);
+
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+
+  backdrop-filter: blur(var(--blur-soft));
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #8f9cff, #6671ff);
+  color: black;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 16px 34px rgba(110,130,255,0.55);
+}
+
+.btn.primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn.danger {
+  background: rgba(255,100,130,0.20);
+  border: 1px solid rgba(255,110,140,0.40);
+  color: #ff6a93;
+}
+
+.btn.danger:hover {
+  background: rgba(255,100,130,0.32);
+}
+
+
+/* ============================================================
+   TABLE SYSTEM
+============================================================ */
+.table-wrapper {
+  border-radius: var(--radius-xl);
+  margin: 22px 4%;
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(22px);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.data-table th {
+  padding: 14px 18px;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+
+  color: rgba(215,220,255,0.72);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.data-table td {
+  padding: 14px 16px;
+}
+
+
+/* ============================================================
+   BADGES
+============================================================ */
+.badge {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  backdrop-filter: blur(12px);
+}
+
+.badge-liquid {
+  color: #7fffd4;
+}
+
+.badge-invested {
+  color: #c1c5ff;
+}
+
+.badge-income {
+  color: #65f0c0;
+}
+
+.badge-expense {
+  color: #ff6a93;
+}
+
+
+/* ============================================================
+   BOTTOM NAV – iOS 18 concept
+============================================================ */
+.bottom-nav {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 86%;
+  max-width: 420px;
+
+  padding: 12px 18px;
+  border-radius: 32px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(26px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.20);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.45),
+    inset 0 0 25px rgba(255,255,255,0.08);
+
+  z-index: 9999;
+}
+
+.nav-item {
+  flex: 1;
+  padding: 6px 4px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 12px;
+  color: rgba(255,255,255,0.60);
+
+  border-radius: 20px;
+  transition: 0.25s ease;
+}
+
+.nav-icon {
+  font-size: 22px;
+  opacity: 0.75;
+}
+
+.nav-item.active {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  transform: translateY(-2px);
+
+  box-shadow:
+    inset 0 0 12px rgba(255,255,255,0.35),
+    0 0 16px rgba(255,255,255,0.25);
+}
+
+.nav-item.active .nav-icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.55));
+}
+
+
+
+/* ============================================================
+   MOBILE RESPONSIVE
+============================================================ */
+
+@media (max-width: 390px) {
+  .panel {
+    border-radius: 22px;
+    padding: 18px 18px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
