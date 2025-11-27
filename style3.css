@@ -1,0 +1,232 @@
+/* ================================
+   ISLAND HEADER
+================================ */
+
+.rec-island {
+  width: 100%;
+  margin: 12px auto 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.rec-island-core {
+  width: 92%;
+  max-width: 500px;
+
+  padding: 16px 20px;
+  border-radius: 38px;
+
+  background:
+    radial-gradient(circle at 0% -20%, rgba(255,255,255,0.14), transparent 60%),
+    radial-gradient(circle at 100% 120%, rgba(150,160,255,0.25), transparent 70%),
+    rgba(8,10,32,0.85);
+
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 14px 32px rgba(0,0,0,0.55),
+    inset 0 0 30px rgba(255,255,255,0.05);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rec-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rec-icon ion-icon {
+  font-size: 28px;
+  color: #cdd3ff;
+}
+
+.rec-title h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+}
+
+
+/* ================================
+   TABS (pill style)
+================================ */
+
+.rec-tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.rec-pill {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+  color: white;
+  font-size: 14px;
+  backdrop-filter: blur(14px);
+  transition: 0.25s;
+}
+
+.rec-pill.active {
+  background: linear-gradient(135deg, #a6b0ff, #717dff);
+  color: black;
+  box-shadow: 0 12px 26px rgba(140,150,255,0.50);
+  transform: translateY(-2px);
+}
+
+
+/* ================================
+   FORM PANEL
+================================ */
+
+.rec-form-panel {
+  margin: 20px 4%;
+  padding: 26px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.55);
+}
+
+.rec-form-panel h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.rec-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* WEEKDAY SELECTOR (iOS buttons) */
+
+.weekday-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #d0d4ff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.day-btn.active {
+  background: linear-gradient(135deg, #aab4ff, #6b77ff);
+  color: black;
+  box-shadow: 0 8px 18px rgba(140,150,255,0.45);
+}
+
+
+/* ================================
+   LISTA RICORRENTI (CARD STYLE)
+================================ */
+
+.rec-list-panel {
+  margin: 22px 4%;
+  padding: 14px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+}
+
+.rec-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rec-card {
+  padding: 18px 20px;
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rec-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rec-card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.rec-card-cat {
+  font-size: 13px;
+  opacity: .7;
+}
+
+.rec-card-right {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  gap: 4px;
+}
+
+.rec-card-amount-pos {
+  color: #6bf5c0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.rec-card-amount-neg {
+  color: #ff6f92;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.card-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  font-size: 18px;
+  opacity: .7;
+}
+
+.card-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.rec-tabs .tab {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.70);
+  transition: 0.25s;
+}
+
+.rec-tabs .tab.active {
+  background: linear-gradient(135deg, #a6b0ff, #727dff);
+  border-color: transparent;
+  color: #050612;
+  box-shadow: 0 12px 26px rgba(130,150,255,0.55);
+}

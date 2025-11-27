@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>NeoBudget - Ricorrenti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <link rel="stylesheet" href="general.css">
+  <link rel="stylesheet" href="style3.css">
+</head>
+
+<body>
+
+<div class="app-view active">
+
+  <!-- HEADER ISLAND STYLE -->
+  <header class="rec-island">
+    <div class="rec-island-core">
+
+      <div class="rec-left">
+        <div class="rec-icon">
+          <ion-icon name="repeat-outline"></ion-icon>
+        </div>
+        <div class="rec-title">
+          <h1>Ricorrenti</h1>
+        </div>
+      </div>
+
+      <nav id="rec-tabs" class="rec-tabs">
+        <button class="rec-pill active" data-rec-type="income">Entrate</button>
+        <button class="rec-pill" data-rec-type="expense">Spese</button>
+      </nav>
+
+    </div>
+  </header>
+
+
+
+  <!-- FORM PANEL -->
+  <section class="rec-form-panel">
+    <h3 id="rec-form-title">Nuova entrata ricorrente</h3>
+
+    <form id="rec-form" class="rec-form">
+
+      <div class="field-group">
+        <label>Nome</label>
+        <input type="text" id="rec-name" placeholder="Es. Stipendio, Affitto, Netflix…">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group half">
+          <label>Importo</label>
+          <input type="number" id="rec-amount" step="0.01">
+        </div>
+
+        <div class="field-group half">
+          <label>Conto</label>
+          <select id="rec-account">
+            <option value="liquid">Liquidità</option>
+            <option value="invested">Investito</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Categoria</label>
+        <input type="text" id="rec-category" placeholder="Es. Casa, Lavoro…">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group half">
+          <label>Dal</label>
+          <input type="date" id="rec-start">
+        </div>
+        <div class="field-group half">
+          <label>Fino al</label>
+          <input type="date" id="rec-end">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Ricorrenza</label>
+        <select id="rec-mode">
+          <option value="monthly">Mensile</option>
+          <option value="daily">Ogni giorno</option>
+          <option value="everyXDays">Ogni X giorni</option>
+          <option value="weekly">Ogni settimana</option>
+          <option value="weeklySpecific">Giorni specifici</option>
+          <option value="everyXMonths">Ogni X mesi</option>
+          <option value="yearly">Ogni anno</option>
+        </select>
+      </div>
+
+      <!-- INTERVAL -->
+      <div id="rec-interval-row" class="field-group hidden">
+        <label>Intervallo</label>
+        <input type="number" id="rec-interval" min="1" value="1">
+      </div>
+
+      <!-- WEEKDAYS -->
+      <div id="rec-weekdays-row" class="field-group hidden">
+        <label>Giorni della settimana</label>
+        <div id="rec-weekdays" class="weekday-row">
+          <button type="button" data-day="1" class="day-btn">L</button>
+          <button type="button" data-day="2" class="day-btn">M</button>
+          <button type="button" data-day="3" class="day-btn">M</button>
+          <button type="button" data-day="4" class="day-btn">G</button>
+          <button type="button" data-day="5" class="day-btn">V</button>
+          <button type="button" data-day="6" class="day-btn">S</button>
+          <button type="button" data-day="7" class="day-btn">D</button>
+        </div>
+      </div>
+
+      <button id="rec-submit" class="btn primary full-width">Aggiungi entrata ricorrente</button>
+      <button id="rec-cancel" type="button" class="btn cancel full-width hidden">Annulla modifica</button>
+
+    </form>
+  </section>
+
+
+
+  <!-- LISTA CARD STYLE -->
+  <section class="rec-list-panel">
+    <h3>Lista</h3>
+
+    <div id="rec-list" class="rec-cards"></div>
+  </section>
+
+</div>
+
+<nav class="bottom-nav">
+  <a class="nav-item" href="index.html"><ion-icon class="nav-icon" name="home-outline"></ion-icon></a>
+  <a class="nav-item" href="second.html"><ion-icon class="nav-icon" name="document-text-outline"></ion-icon></a>
+  <a class="nav-item active" href="third.html"><ion-icon class="nav-icon" name="repeat-outline"></ion-icon></a>
+  <a class="nav-item" href="fourth.html"><ion-icon class="nav-icon" name="settings-outline"></ion-icon></a>
+</nav>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>

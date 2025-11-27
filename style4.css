@@ -1,0 +1,241 @@
+/* HEADER */
+.settings-header {
+  margin: 24px 4%;
+  padding: 28px 22px;
+  border-radius: 32px;
+
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(26px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.14);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.55),
+    inset 0 0 18px rgba(255,255,255,0.05);
+}
+
+.settings-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+
+/* SECTION */
+.settings-section {
+  margin: 22px 4%;
+  padding: 26px;
+  border-radius: 32px;
+
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 18px 38px rgba(0,0,0,0.55),
+    inset 0 0 18px rgba(255,255,255,0.04);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sec-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
+
+
+/* BUTTON */
+.settings-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 16px;
+  border-radius: 20px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: 0.28s ease;
+}
+
+.settings-btn ion-icon {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.settings-btn:hover {
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-2px);
+}
+
+
+
+/* DANGER BUTTON */
+.settings-btn.danger {
+  border: 1px solid rgba(255,90,110,0.35);
+  background: rgba(255,90,110,0.18);
+  color: #ff7b95;
+}
+
+.settings-btn.danger:hover {
+  background: rgba(255,90,110,0.28);
+  transform: translateY(-2px);
+}
+/* ================================
+   PROFILE SECTION
+=================================== */
+.profile-section {
+  margin: 22px 4%;
+  padding: 28px 22px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(26px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 18px 38px rgba(0,0,0,0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.25);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.55);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile-sub {
+  font-size: 13px;
+  opacity: .75;
+}
+
+.profile-edit-btn {
+  margin-top: 4px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.profile-edit-btn:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-2px);
+}
+
+/* ================================
+   THEME SECTION
+=================================== */
+.theme-section {
+  margin: 22px 4%;
+  padding: 26px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(25px);
+}
+
+.theme-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+  display: inline-block;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.25);
+  border-radius: 34px;
+  transition: .3s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background: #8da0ff;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* ================================
+   ABOUT SECTION
+=================================== */
+.about-section {
+  margin: 22px 4%;
+  padding: 26px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 18px 38px rgba(0,0,0,0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.about-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.about-val {
+  opacity: .85;
+}

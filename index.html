@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>NeoBudget • HyperVision Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- iOS PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="./assets/images/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Icons -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="general.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+
+<body>
+
+<div class="hyper-shell">
+
+  <!-- Glow di sfondo -->
+  <div class="ambient-glow"></div>
+
+  <!-- HEADER -->
+<header class="island-header">
+  <div class="island-core">
+
+    <div class="island-left">
+      <div class="island-orb">
+        <img src="./logo-180.png" alt="logo" class="island-logo">
+      </div>
+
+      <div class="island-title">
+        <h1>NeoBudget</h1>
+      </div>
+    </div>
+
+    <div class="island-right">
+      <input type="date" id="dateFilter" class="island-date">
+      <button id="btnToday" class="island-icon-btn">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+  <!-- KPI -->
+  <section class="kpi-hyper-grid">
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="cash-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Saldo previsto</h3>
+        <span id="stat-saldo">0,00 €</span>
+      </div>
+    </div>
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="wallet-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Liquidità</h3>
+        <span id="stat-liquidita">0,00 €</span>
+      </div>
+    </div>
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="trending-up-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Investito</h3>
+        <span id="stat-investito">0,00 €</span>
+      </div>
+    </div>
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="arrow-down-circle-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Entrate previste</h3>
+        <span id="stat-entrate-previste">0,00 €</span>
+      </div>
+    </div>
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="arrow-up-circle-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Spese previste</h3>
+        <span id="stat-spese-previste">0,00 €</span>
+      </div>
+    </div>
+
+    <div class="kpi-hyper-card">
+      <div class="kpi-icon"><ion-icon name="layers-outline"></ion-icon></div>
+      <div class="kpi-info">
+        <h3>Totale</h3>
+        <span id="stat-totale">0,00 €</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CHART -->
+<!-- CHART PANEL FUTURE -->
+<section class="hyper-chart-neo">
+  <div class="chart-header">
+    <div class="chart-icon-wrap">
+      <ion-icon name="pulse-outline"></ion-icon>
+    </div>
+    <h2>Andamento Mensile</h2>
+  </div>
+
+  <div class="chart-frame">
+    <div class="chart-glow"></div>
+    <div id="chart-month" class="chart-host"></div>
+  </div>
+</section>
+
+<!-- SUMMARY PANEL FUTURE -->
+<section class="summary-neo">
+  <div class="summary-header">
+    <div class="summary-icon-wrap">
+      <ion-icon name="grid-outline"></ion-icon>
+    </div>
+    <h2>Categorie in evidenza</h2>
+  </div>
+
+  <div id="summary-list" class="summary-list-neo"></div>
+</section>
+
+
+</div>
+
+<!-- NAVIGATION -->
+<nav class="bottom-nav">
+  <a class="nav-item active" href="index.html"><ion-icon class="nav-icon" name="home-outline"></ion-icon></a>
+  <a class="nav-item" href="second.html"><ion-icon class="nav-icon" name="document-text-outline"></ion-icon></a>
+  <a class="nav-item" href="third.html"><ion-icon class="nav-icon" name="repeat-outline"></ion-icon></a>
+  <a class="nav-item" href="fourth.html"><ion-icon class="nav-icon" name="settings-outline"></ion-icon></a>
+</nav>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script type="module" src="app.js"></script>
+
+</body>
+</html>

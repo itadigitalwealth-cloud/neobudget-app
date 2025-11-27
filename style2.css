@@ -1,0 +1,512 @@
+/* ============================================
+   SHELL
+============================================ */
+.mov-shell {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 18px 12px 90px;
+}
+
+/* ============================================
+   HEADER ISLAND
+============================================ */
+.mov-island {
+  width: 94%;
+  margin: 0 auto 22px;
+  padding: 16px 20px;
+
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at -10% -20%, rgba(150,160,255,0.25), transparent 60%),
+    radial-gradient(circle at 110% 20%, rgba(100,110,255,0.26), transparent 70%),
+    rgba(10,12,32,0.85);
+
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(30px);
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.55),
+    inset 0 0 30px rgba(255,255,255,0.05);
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Logo + titolo */
+.mov-island-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mov-icon-orb {
+  width: 48px;
+  height: 48px;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at 20% 10%, #ffffff, transparent 55%),
+    linear-gradient(135deg, #8d97ff, #262b5e);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  color: #0d0f28;
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.55),
+    0 0 18px rgba(140,150,255,0.8);
+}
+
+.mov-title h1 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.mov-title p {
+  font-size: 12px;
+  color: rgba(205,210,255,0.7);
+}
+
+/* Buttons entrata / uscita */
+.mov-island-right {
+  display: flex;
+  gap: 12px;
+}
+
+.mov-pill-btn {
+  flex: 1;
+  padding: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 20px;
+  border: none;
+
+  background: rgba(255,255,255,0.10);
+  color: white;
+
+  backdrop-filter: blur(18px);
+  transition: .25s ease;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mov-pill-btn.active,
+.mov-pill-btn:hover {
+  background: linear-gradient(135deg, #8fa2ff, #6473ff);
+  box-shadow: 0 12px 26px rgba(130,140,255,0.55);
+  transform: translateY(-2px);
+  color: #050612;
+}
+
+/* ============================================
+   FORM CARD
+============================================ */
+.mov-form-card {
+  width: 94%;
+  margin: 0 auto 26px;
+
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .35s ease, opacity .35s ease;
+
+  background:
+    radial-gradient(circle at 0% -10%, rgba(140,150,255,0.2), transparent 65%),
+    rgba(15,17,40,0.80);
+
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(26px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.45);
+}
+
+#movementForm.open {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+#mov-form {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.field.full {
+  width: 100%;
+}
+
+label {
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,0.75);
+}
+
+input, select, textarea {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: white;
+  backdrop-filter: blur(16px);
+}
+
+/* ============================================
+   LISTA MOVIMENTI
+============================================ */
+.mov-list-card {
+  width: 94%;
+  margin: 0 auto 20px;
+  padding: 20px;
+
+  border-radius: 28px;
+  background: rgba(12,14,36,0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(26px);
+}
+
+.list-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: rgba(230,235,255,0.85);
+}
+
+.mov-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card singola movimento */
+.mov-item {
+  padding: 14px 16px;
+  border-radius: 22px;
+
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(0,0,0,0.20)),
+    rgba(10,12,28,0.85);
+
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.10);
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+
+  transition: 0.25s ease;
+}
+
+.mov-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.45);
+}
+
+.mov-item .line-1 {
+  font-size: 13px;
+  opacity: .75;
+}
+
+.mov-item .line-2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.mov-amount-pos { color: #7fffd4; }
+.mov-amount-neg { color: #ff8aa3; }
+
+.mov-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mov-actions button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  opacity: .7;
+  cursor: pointer;
+}
+
+.mov-actions button:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* ============================================
+   LISTA MOVIMENTI (VERSIONE FIXATA)
+============================================ */
+
+.mov-list-card {
+  width: 94%;
+  margin: 0 auto 26px;
+  padding: 22px 20px 26px;
+
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 0% -20%, rgba(160,170,255,0.18), transparent 65%),
+    rgba(12,14,36,0.85);
+
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(30px);
+
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.55),
+    inset 0 0 22px rgba(255,255,255,0.04);
+}
+
+.list-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: 0.3px;
+  color: rgba(230,235,255,0.92);
+}
+
+.mov-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* CARD MOVIMENTO */
+.mov-item {
+  padding: 16px 18px;
+  border-radius: 24px;
+
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.06), rgba(0,0,0,0.25)),
+    rgba(10,12,28,0.8);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(22px);
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+
+  gap: 10px;
+  transition: 0.25s ease;
+  position: relative;
+}
+
+.mov-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.55);
+}
+
+/* TESTO */
+.mov-item .line-1 {
+  font-size: 13px;
+  opacity: .70;
+  margin-bottom: 4px;
+}
+
+.mov-item .line-2 {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: .95;
+}
+
+/* IMPORTI SEMPRE ALLINEATI A DESTRA */
+.mov-item .mov-amount {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: right;
+  min-width: 90px;
+}
+
+.mov-amount-pos {
+  color: #9dffd9;
+  text-shadow: 0 0 10px rgba(100,255,200,0.4);
+}
+
+.mov-amount-neg {
+  color: #ff99ad;
+  text-shadow: 0 0 10px rgba(255,140,150,0.35);
+}
+
+/* BOTTONI EDIT / DELETE */
+.mov-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.mov-actions button {
+  background: rgba(255,255,255,0.05);
+  width: 36px;
+  height: 36px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  opacity: .8;
+  transition: 0.25s ease;
+}
+
+.mov-actions button:hover {
+  opacity: 1;
+  transform: scale(1.12);
+  background: rgba(255,255,255,0.12);
+}
+
+/* ============================================
+   LISTA MOVIMENTI • CLEAN PREMIUM VERSION
+============================================ */
+
+.mov-list-card {
+  width: 94%;
+  margin: 0 auto 24px;
+  padding: 22px;
+
+  background: rgba(255,255,255,0.05);
+  border-radius: 24px;
+
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(18px);
+}
+
+.list-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: rgba(255,255,255,0.9);
+}
+
+.mov-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+
+/* CARD MOVIMENTO */
+.mov-item {
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 16px 18px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: .2s ease;
+}
+
+.mov-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.15);
+}
+
+
+/* BLOCCO A SINISTRA */
+.mov-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+/* DATA + IMPORTO IN RIGA */
+.mov-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.mov-date {
+  font-size: 13px;
+  color: rgba(220,220,240,0.7);
+}
+
+.mov-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.mov-amount-pos { color: #4ae6b2; }
+.mov-amount-neg { color: #ff6f88; }
+
+
+/* CATEGORIA */
+.mov-category {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+}
+
+/* METADATA */
+.mov-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(240,240,255,0.8);
+}
+
+.note {
+  font-size: 12px;
+  color: rgba(210,210,240,0.55);
+}
+
+
+/* AZIONI */
+.mov-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mov-actions button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: rgba(255,255,255,0.65);
+  transition: .2s ease;
+}
+
+.mov-actions button:hover {
+  color: white;
+  transform: scale(1.2);
+}
+
