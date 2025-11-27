@@ -580,9 +580,10 @@ function renderMonthlyChart(selectedDateStr) {
 /* ====================== MOVIMENTI ====================== */
 
 function getSelectedMovementType() {
-  const btn = document.querySelector('.type-btn.active');
+  const btn = document.querySelector('.mov-pill-btn.active');
   return btn ? btn.dataset.type : null;
 }
+
 
 function renderMovements() {
   const list = document.getElementById('mov-list');
